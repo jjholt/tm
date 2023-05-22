@@ -1,6 +1,9 @@
 use std::error::Error;
 
-use crate::behaviour::{add, delete, new};
+use crate::behaviour::{
+    Choose,
+    add::Add, delete::Delete, new::New
+};
 use crate::action::{Category, Behaviour, Action};
 
 pub struct Command {
@@ -16,8 +19,8 @@ impl Command {
             Some(action) => {
                 let mut arg = action.chars();
                 Action {
-                    behaviour: Behaviour::from(arg.next().unwrap()).unwrap(),
-                    category: Category::from(arg.next().unwrap()).unwrap(),
+                    behaviour: Behaviour::from(arg.next().ok_or("Missing behaviour")?)?,
+                    category: Category::from(arg.next().ok_or("Missing category")?)?,
                 }
             }
             None => return Err("Missing command."),
@@ -33,13 +36,13 @@ impl Command {
 
     pub fn apply(self) -> Result<(), Box<dyn Error>> {
         match self.action.behaviour {
-            Behaviour::New => new::choose(
+            Behaviour::New => New::choose(
                 self.action.category, self.target.into_iter()
             ),
-            Behaviour::Delete => delete::choose(
+            Behaviour::Delete => Delete::choose(
                 self.action.category, self.target.into_iter()
             ),
-            Behaviour::Add => add::choose(
+            Behaviour::Add => Add::choose(
                 self.action.category, self.target.into_iter()
             ),
         }

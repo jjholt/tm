@@ -1,7 +1,5 @@
-use std::{error::Error, unimplemented};
+use super::Choose;
 
-use crate::action::Category;
-
-pub fn choose(category: Category, mut args: impl Iterator<Item = String>) -> Result<(), Box<dyn Error>> {
-    unimplemented!()
+pub struct Delete;
+impl Choose for Delete {
 }
