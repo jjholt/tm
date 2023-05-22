@@ -6,21 +6,22 @@ pub mod add;
 pub mod delete;
 pub mod new;
 
-macro_rules! category{
+macro_rules! implement {
     ($function_name:ident) => {
         fn $function_name(args: impl Iterator<Item = String>) -> Result<(), Box<dyn Error>>{
             let _ = args;
-            Ok(())
+            // println!("function {} called successfully", stringify!($function_name));
+            Err("Undefined behaviour".into())
         }
     };
 }
 
 pub trait Choose {
-    category!(coursework);
-    category!(notes);
-    category!(paper);
-    category!(chapter);
-    category!(section);
+    implement!(coursework);
+    implement!(notes);
+    implement!(paper);
+    implement!(chapter);
+    implement!(section);
 
     fn choose(category: Category, args: impl Iterator<Item = String>) -> Result<(), Box<dyn Error>> { 
         match category {

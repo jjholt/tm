@@ -23,11 +23,10 @@ impl Choose for Add {
         let mut buffer = String::new();
 
         let folder = args.next().ok_or("No folder provided")?;
-
         let sections: Vec<String> = args.collect();
-        // if sections.is_empty() {
-        //     return Err("No filename provided").into();
-        // };
+        if sections.is_empty() {
+            return Err("No filename provided".into());
+        };
 
         fs::create_dir_all(&folder)?;
         for section in sections {
