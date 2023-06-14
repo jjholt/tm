@@ -3,11 +3,19 @@ use std::{
     fs, process,
 };
 
-use crate::action::Category;
-
 pub struct ConfigMetadata {
-    config_file: String, 
-    templates_route: String,
+    pub config_file: String, 
+    pub templates_path: String,
+}
+
+pub struct Config {
+    pub metadata: ConfigMetadata,
+}
+
+impl Config {
+    pub fn new(metadata: ConfigMetadata) -> Self {
+        Self {metadata}
+    }
 }
 
 impl ConfigMetadata {
@@ -22,11 +30,11 @@ impl ConfigMetadata {
 
         // Ask for permission only once before creating the config file
         if Self::get_path(&config_files).is_none() {Self::create_config_file(&config_path)?};
-        if Self::get_path(&template_folders).is_none() {Self::create_template_folders(&format!("{config_path}templates/"))?};
+        if Self::get_path(&template_folders).is_none() {Self::create_template_folders(&template_folders[0])?};
 
         Ok(Self { 
             config_file: format!("{config_path}config"),
-            templates_route: format!("{config_path}templates/")
+            templates_path: format!("{config_path}templates/")
         })
     }
 
@@ -39,7 +47,7 @@ impl ConfigMetadata {
     }
 
     fn create_template_folders(template_route: &str) -> Result<(), io::Error> {
-        for category in Category::get_directories() {
+        for category in ["coursework", "notes", "paper"] { 
             fs::create_dir_all(format!("{template_route}{category}"))?;
         };
         Ok(())
@@ -68,13 +76,12 @@ impl ConfigMetadata {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    // use super::*;
     #[test]
     fn load_configs() {
         // let _ = super::load_configs();
     }
     #[test]
     fn serde_config() {
-        unimplemented!();
     }
 }

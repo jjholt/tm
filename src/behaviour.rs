@@ -1,35 +1,22 @@
-use std::error::Error;
-
-use crate::action::Category;
-
-pub mod add;
-pub mod delete;
-pub mod new;
-
-macro_rules! implement {
-    ($function_name:ident) => {
-        fn $function_name(args: impl Iterator<Item = String>) -> Result<(), Box<dyn Error>>{
-            let _ = args;
-            // println!("function {} called successfully", stringify!($function_name));
-            Err("Undefined behaviour".into())
-        }
-    };
+/// Used to convert from a `char` to the appropriate behaviour.
+pub trait ToBehaviour {
+    fn to_behaviour(self) -> Result<Behaviour, &'static str>;
 }
 
-pub trait Choose {
-    implement!(coursework);
-    implement!(notes);
-    implement!(paper);
-    implement!(chapter);
-    implement!(section);
+pub enum Behaviour {
+    New,
+    Delete,
+    Add,
+}
 
-    fn choose(category: Category, args: impl Iterator<Item = String>) -> Result<(), Box<dyn Error>> { 
-        match category {
-            Category::Coursework => Self::coursework(args),
-            Category::Notes => Self::notes(args),
-            Category::Paper => Self::paper(args),
-            Category::Chapter => Self::chapter(args),
-            Category::Section => Self::section(args),
-        }
+impl ToBehaviour for char {
+    fn to_behaviour(self) -> Result<Behaviour, &'static str> {
+        Ok(match self {
+            'n' => Behaviour::New,
+            'd' => Behaviour::Delete,
+            'a' => Behaviour::Add,
+            _ => return Err("Invalid behaviour") 
+        })
     }
 }
+

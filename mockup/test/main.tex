@@ -1,0 +1,30 @@
+\documentclass[oneside]{report}
+\input{settings.tex}
+\begin{document}
+\input{preamble}
+\pagenumbering{roman}
+	\tableofcontents
+	\listoffigures
+	\listoftables 
+	\clearpage
+\pagenumbering{arabic}
+	\begin{abstract}
+		\subimport{src/}{Abstract}
+	\end{abstract}
+
+	\chapter{Introduction}
+		\subimport{src/}{Introduction}
+	\chapter{Methods}
+		\subimport{src/}{Methods}
+	\chapter{Results}
+		\subimport{src/}{Results}
+	\chapter{Discussion}
+		\subimport{src/}{Discussion}
+	\chapter{Conclusion}
+		\subimport{src/}{Conclusion}
+	\clearpage
+	
+	\bibliography{
+		bibliography
+	}
+\end{document}
